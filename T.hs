@@ -6,7 +6,7 @@ import Data.Ratio
 -- Paul Tarau 2014 
 -- https://www.cse.unt.edu/~tarau/research/slides/slides_ictac14.pdf
 
-data T = F [T]
+newtype T = F [T]
   deriving (Eq)
 
 zero = F []
