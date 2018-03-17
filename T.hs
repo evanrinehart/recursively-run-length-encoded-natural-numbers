@@ -195,7 +195,7 @@ nsyr n = n : nsyr (syracuse n)
 -- b <- b * s
 -- a <- s * (a - b)
 -- if a==b, answer is (q+1, 0)
--- if a<b, determined remainder with exact division
+-- if a<b, remainder = a - b * q
 -- else repeat
 
 division :: T -> T -> (T,T)
@@ -216,7 +216,7 @@ division a0 b0 = start where
       _    -> case cmp a' b' of
         GT -> go (s' p) q' a' b'
         LT -> (q', r) where
-          r = a' `exactDiv` (b' `exactDiv` b0)
+          r = sub a0 (mul b0 q')
         EQ -> (s q', t 0)  -- exact division
   chooseP p a b = case cmp (leftshiftBy p b) a of
     GT -> chooseP (s' p) a b
