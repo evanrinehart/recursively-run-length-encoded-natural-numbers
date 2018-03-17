@@ -229,6 +229,20 @@ bits (F []) = ""
 bits x | even_ x = '0' : bits (hf x)
 bits x | odd_ x  = '1' : bits (hf x)
 
+gcd_ :: T -> T -> T
+gcd_ (F []) x = x
+gcd_ x (F []) = x
+gcd_ x0 y0 = go 0 x0 y0 where
+  go d x y | even_ x && even_ y = go (s d) (hf x) (hf y)
+           | otherwise          = go1 d x y
+  go1 d x y | x /= y    = go2 d x y
+            | otherwise = mul x (exp2 d)
+  go2 d x y | even_ x = go1 d (hf x) y
+            | even_ y = go1 d x (hf y)
+            | otherwise = case cmp x y of
+                GT -> go1 d (hf (sub x y)) y
+                _  -> go1 d x (hf (sub y x))
+
 instance Num T where
   fromInteger = t
   (+) = add
@@ -254,3 +268,6 @@ instance Integral T where
   toInteger = n
   divMod = division
   quotRem = division
+
+top :: T -> [Integer]
+top (F xs) = map n xs
