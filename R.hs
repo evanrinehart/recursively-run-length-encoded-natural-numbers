@@ -24,5 +24,5 @@ close e r1 r2 | e <= 0 = error ("close, bad tolerance " ++ show e)
     LT -> True
     _  -> False
 
-dumbZero :: R
-dumbZero = K (\n -> W 1 (exp2 (s (s n))))
+experimentZero :: R
+experimentZero = K (\n -> W 1 (exp2 (s (s n))))
