@@ -221,7 +221,6 @@ division a0 b0 = start where
   chooseP p a b = case cmp (leftshiftBy p b) a of
     GT -> chooseP (s' p) a b
     _  -> p
-  exactDiv a b = let (q,F []) = division a b in q
 
 n2 (x,y) = (n x, n y)
 
