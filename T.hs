@@ -1,5 +1,7 @@
 module T where
 
+import Data.Ratio
+
 -- "On the Arithmetic of Recursively Run-length Compressed Natural Numbers"
 -- Paul Tarau 2014 
 -- https://www.cse.unt.edu/~tarau/research/slides/slides_ictac14.pdf
@@ -38,7 +40,6 @@ s' b@(F (F []:x:xs))   | odd_ b  = F (s x:xs) -- 4
 s' b@(F (x:xs))        | odd_ b  = F (F []:s' x:xs) -- 3
 
 paren :: T -> String
-paren (F []) = "()"
 paren (F xs) = "(" ++ concat (map paren xs) ++ ")"
 
 unparen :: String -> T
@@ -152,7 +153,6 @@ mul x y = f (cmp x y) where
   mul1 a@(F (x:xs)) y | even_ a = leftshiftBy (s x) (mul1 (F xs) y)
   mul1 a y | odd_ a = add y (mul1 (s' a) y)
 
-
 square x = mul x x
 
 pow _ (F []) = F [F []]
@@ -223,10 +223,35 @@ division a0 b0 = start where
     _  -> p
   exactDiv a b = let (q,F []) = division a b in q
 
-
 n2 (x,y) = (n x, n y)
 
 bits :: T -> String
 bits (F []) = ""
 bits x | even_ x = '0' : bits (hf x)
 bits x | odd_ x  = '1' : bits (hf x)
+
+instance Num T where
+  fromInteger = t
+  (+) = add
+  (*) = mul
+  (-) = sub
+  abs x = x
+  signum (F []) = F []
+  signum x = F [F []]
+
+instance Ord T where
+  compare = cmp
+
+instance Enum T where
+  succ = s
+  pred = s'
+  toEnum = fromIntegral 
+  fromEnum = fromIntegral
+
+instance Real T where
+  toRational i = toInteger i % 1
+
+instance Integral T where
+  toInteger = n
+  divMod = division
+  quotRem = division
