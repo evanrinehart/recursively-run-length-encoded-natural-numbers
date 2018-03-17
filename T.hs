@@ -225,3 +225,8 @@ division a0 b0 = start where
 
 
 n2 (x,y) = (n x, n y)
+
+bits :: T -> String
+bits (F []) = ""
+bits x | even_ x = '0' : bits (hf x)
+bits x | odd_ x  = '1' : bits (hf x)
